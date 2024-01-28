@@ -9,10 +9,11 @@
 #       creates an error if timestamp != 0.
 
 from MIDI.message.internal import MetaMessage
+from MIDI.timestamp        import TimeStamp
 
 
 class SequenceNumber(MetaMessage):
-    def __init__(self, timestamp=0, seq_num=1):
+    def __init__(self, timestamp=TimeStamp(1, 1), seq_num=1):
         super().__init__(timestamp)
         self._event_code = bytes.fromhex('FF 00 02')
         self.sequence_number = seq_num.to_bytes(2, 'big')

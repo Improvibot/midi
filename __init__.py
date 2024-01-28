@@ -1,6 +1,7 @@
 # Non-Message Objects
 from MIDI.base import Encoding
 from MIDI.track import Track
+from MIDI.timestamp import TimeStamp, TimeSig
 
 # Channel Messages
 from MIDI.message.channel.aftertouch import Aftertouch

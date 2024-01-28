@@ -1,4 +1,5 @@
 from MIDI.message.internal import MetaMessage
+from MIDI.timestamp import TimeStamp
 
 # Note: TrackNumber and SequenceNumber create the same MIDI message.
 #       They have separate classes purely for the ease of the end user,
@@ -12,7 +13,7 @@ from MIDI.message.internal import MetaMessage
 
 
 class TrackNumber(MetaMessage):
-    def __init__(self, timestamp=0, track_num=1):
+    def __init__(self, timestamp=TimeStamp(1, 1), track_num=1):
         super().__init__(timestamp)
         self._event_code = bytes.fromhex('FF0002')
         self.track_number = track_num.to_bytes(2, 'big')

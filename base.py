@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from MIDI.timestamp import TimeStamp
 
 
 class Encoding(Enum):
@@ -7,12 +8,9 @@ class Encoding(Enum):
 
 
 class Base:
-    def __init__(self, timestamp=0, include_data_length=False):
+    def __init__(self, timestamp=TimeStamp(1, 1), include_data_length=False):
         self._event_code = b''
-        if type(timestamp) == 'bytes':
-            self.timestamp = timestamp
-        else:
-            self.timestamp = timestamp.to_bytes(self.length(timestamp))
+        self.timestamp = timestamp
         self.include_data_length = include_data_length
 
     def data(self):
@@ -24,9 +22,10 @@ class Base:
         else:
             return self._event_code
 
-    def encode(self, encoding, ticks=500000, bpm=120, sample_rate=44100):
+    def encode(self, encoding, prior_timestamp, time_sig, ticks=500000, bpm=120, sample_rate=44100):
         if encoding == Encoding.MIDI:
-            ts = self.timestamp
+            ts = self.size_to_bytes(self.timestamp.to_midi_ticks(
+                ticks, prior_timestamp, time_sig))
         else:
             ts = b''
 
@@ -39,8 +38,8 @@ class Base:
 
     # Returns the length of the message in bytes, used for MIDI files where tracks
     #    have to report total length
-    def size(self):
-        return len(self.encode(Encoding.MIDI))
+    # def size(self):
+    #    return len(self.encode(Encoding.MIDI))
 
     def length(self, value):
         return 1 if value == 0 else ((value.bit_length() + 7) // 8)

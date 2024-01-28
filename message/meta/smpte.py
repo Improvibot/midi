@@ -1,8 +1,9 @@
 from MIDI.message.internal import MetaMessage
+from MIDI.timestamp        import TimeStamp
 
 
 class SMPTE(MetaMessage):
-    def __init__(self, timestamp=0, hour=0, minute=0, second=0, frame=0, frame_fraction=0):
+    def __init__(self, timestamp=TimeStamp(1, 1), hour=0, minute=0, second=0, frame=0, frame_fraction=0):
         super().__init__(timestamp)
         self._event_code = bytes.fromhex('FF 54 05')
         self.hour = hour.to_bytes(1, 'big')

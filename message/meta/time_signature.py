@@ -1,8 +1,9 @@
 from MIDI.message.internal import MetaMessage
+from MIDI.timestamp import TimeStamp
 
 
 class TimeSignature(MetaMessage):
-    def __init__(self, timestamp=0, num_beats=4, beat_note=4, clocks=0, num_32nd_notes=24):
+    def __init__(self, timestamp=TimeStamp(1, 1), num_beats=4, beat_note=4, clocks=0, num_32nd_notes=24):
         super().__init__(timestamp)
         self._event_code = bytes.fromhex('FF 58 04')
         self.num_beats = num_beats.to_bytes(1, 'big')

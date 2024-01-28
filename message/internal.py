@@ -1,8 +1,9 @@
 from MIDI.base import Base, Encoding
+from MIDI.timestamp import TimeStamp
 
 
 class Message(Base):
-    def __init__(self, timestamp=0, include_data_length=False):
+    def __init__(self, timestamp=TimeStamp(1, 1), include_data_length=False):
         super().__init__(timestamp, include_data_length)
         self._event_code = b''
 
@@ -18,7 +19,7 @@ class Message(Base):
 
 
 class ChannelMessage(Message):
-    def __init__(self, timestamp=0, channel=0):
+    def __init__(self, timestamp=TimeStamp(1, 1), channel=0):
         super().__init__(timestamp)
         self._event_code = b''
         self.channel = channel.to_bytes()
@@ -31,7 +32,7 @@ class ChannelMessage(Message):
 
 
 class MetaMessage(Message):
-    def __init__(self, timestamp=0, include_data_length=False):
+    def __init__(self, timestamp=TimeStamp(1, 1), include_data_length=False):
         super().__init__(timestamp, include_data_length)
         self._event_code = b''
         self.include_data_length = include_data_length
@@ -41,7 +42,7 @@ class MetaMessage(Message):
 
 
 class MetaTextMessage(Message):
-    def __init__(self, timestamp=0, text=''):
+    def __init__(self, timestamp=TimeStamp(1, 1), text=''):
         super().__init__(timestamp, include_data_length=True)
         self._event_code = b''
         self.text = bytes(text, 'ascii')
