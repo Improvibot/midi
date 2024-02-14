@@ -7,6 +7,13 @@ class Track(Base):
     def __init__(self):
         self.messages = []
 
+    def __repr__(self):
+        response = f'Track\t['
+        for message in self.messages:
+            response += '\n\t\t' + message.__repr__()
+        response += '\n\t]'
+        return response
+    
     def append(self, message):
         self.messages.append(message)
 

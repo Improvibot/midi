@@ -1,4 +1,5 @@
 from functools import reduce
+from MIDI.Container.track import Track
 from MIDI.Message import *
 import MIDI.Internal as internal
 from MIDI.Internal import Base, Encoding, Format, Division, DivisionType, TimeStamp
@@ -32,6 +33,18 @@ class File(Base):
             self.bpm = bpm
             self.sample_rate = sample_rate
 
+    def __repr__(self):
+        response = 'File\t['
+        for track in self.tracks:
+            response += '\n\t' + track.__repr__()
+        response += '\n]'
+        return response
+
+    def add_track(self):
+        track = Track()
+        self.append_track(track)
+        return track
+
     def append_track(self, track):
         self.tracks.append(track)
 
@@ -53,15 +66,8 @@ class File(Base):
         if (encoding == Encoding.MIDI):
 
             return reduce(lambda x, track:
-                          # logging.info(
-                          #    f'x: {x}\ttrack: {track.encode(encoding=Encoding.MIDI, time_sig=self.time_signature, ticks=self.ticks)}'),
                           x + track.encode(encoding=Encoding.MIDI,
                                            time_sig=self.time_signature, ticks=self.ticks),
-                          # x.join(track.encode(encoding=Encoding.MIDI,
-                          #                    time_sig=self.time_signature,
-                          #                    ticks=self.ticks
-                          #                    )
-                          #       ),
                           self.tracks,
                           self.encode_header()
                           )
@@ -90,7 +96,6 @@ class File(Base):
                 f'Format: {format.to_bytes(2, "big").hex(" ").upper()}')
             return format.to_bytes(2, 'big')
         return b'MThd' + (6).to_bytes(4, 'big') + select_format() + len(self.tracks).to_bytes(2, 'big') + self.division.encode()
-        # + self.format.encode()
 
     def load(self, filename):
         pass

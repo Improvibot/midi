@@ -8,7 +8,7 @@ class Base:
         self.timestamp = timestamp
         self.include_data_length = include_data_length
 
-    def __str__(self):
+    def __repr__(self):
         return f'{type(self).__name__}\t{self.data().hex(" ").upper()}'
 
     def data(self):
